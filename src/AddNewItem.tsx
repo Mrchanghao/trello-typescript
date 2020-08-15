@@ -8,7 +8,7 @@ interface AddItemProps {
   dark?: boolean;
 }
 
-export const AddItem = ({
+export const AddNewItem = ({
   onAdd,
   toggleButtonText,
   dark,
