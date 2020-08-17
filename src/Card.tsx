@@ -3,10 +3,11 @@ import { CardContainer } from './sytles';
 
 interface CardProps {
   text: string;
+  index?: number;
 };
 
 
-export const Card = ({ text }: CardProps) => {
+export const Card = ({ text, index }: CardProps) => {
   return (
     <CardContainer>
       {text}

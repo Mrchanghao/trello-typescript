@@ -1,20 +1,20 @@
 import * as React from 'react';
 import { AppContainer } from './sytles';
 import { Column } from './Column';
-import { Card } from './Card';
 import { AddNewItem } from './AddNewItem';
 import { useAppState } from './context/AppState';
+import { CustomDragLayer } from './CustomDragLayer';
 
 
 const App = () => {
-  const { state } = useAppState();
-  console.log(state);
+  const { state, dispatch } = useAppState();
   return (
     <AppContainer>
+      <CustomDragLayer />
       { state.lists.map((list, i) => (
-        <Column text={list.text} index={i} key={list.id} />
+        <Column text={list.text} index={i} key={list.id} id={list.id} />
       ))}
-      <AddNewItem toggleButtonText={"+ Add list"} onAdd={console.log} />
+      <AddNewItem toggleButtonText={"+ Add list"} onAdd={text => dispatch({type: 'ADD_LIST', payload: text})} />
       {/* <Column text={'To do'}>
         <Card text={"generate To App"} />
       </Column>
