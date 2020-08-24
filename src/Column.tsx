@@ -12,12 +12,14 @@ interface ColumnProps {
   text: string;
   index: number;
   id: string;
+  isPreview?: boolean;
 }
 
 export const Column = ({ 
   text, 
   index,
   id,
+  isPreview,
   children }: PropsWithChildren<ColumnProps>) => {
     const { state, dispatch } = useAppState()
     const ref = useRef<HTMLDivElement>(null);
@@ -36,7 +38,7 @@ export const Column = ({
     })
     drag(drop(ref));
     return (
-    <ColumnContainer ref={ref} isHidden={isHidden(state.draggedItem, 'COLUMN', id)}>
+    <ColumnContainer ref={ref} isHidden={isHidden(isPreview, state.draggedItem, 'COLUMN', id)} isPreview={isPreview}>
       <ColumnTitle>
         {text}
       </ColumnTitle>

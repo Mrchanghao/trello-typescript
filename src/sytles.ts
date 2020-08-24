@@ -60,6 +60,7 @@ export const NewItemInput = styled.input`
 `
 interface DragPreviewContainerProps {
   isHidden?: boolean;
+  isPreview?: boolean;
 };
 
 export const CustomDragLayerContainer = styled.div`
@@ -74,6 +75,7 @@ export const CustomDragLayerContainer = styled.div`
 
 export const DragPreviewContainer = styled.div<DragPreviewContainerProps>`
   opacity: ${props => (props.isHidden ? 0.3 : 1)};
+  transform: ${props => (props.isPreview ? "rotate(5deg" : undefined)};
 `;
 
 export const ColumnContainer = styled(DragPreviewContainer)`

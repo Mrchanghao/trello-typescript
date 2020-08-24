@@ -15,6 +15,14 @@ type Action = | {type: 'ADD_LIST', payload: string} | {type: 'ADD_TASK', payload
 }} | {
   type: 'SET_DRAGGED_ITEM',
   payload: DragItem | undefined,
+} | {
+  type: 'MOVE_TASK',
+  payload: {
+    dragIndex: number,
+    hoverIndex: number,
+    sourceColumn: string,
+    targetColumn: string,
+  }
 }
 interface Task {
   id: string;
@@ -60,12 +68,12 @@ const appState: AppState =  {
 
 export interface AppState {
   draggedItem: DragItem | undefined;
-  lists: Array<List>;
+  lists: List[];
 }
 
 const appStateReducer = (state: AppState, action: Action): AppState => {
   switch(action.type) {
-    case 'ADD_LIST':
+    case 'ADD_LIST': {
       // const visibilityExample = 'Too visible';
       return {
         ...state,
@@ -74,7 +82,9 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
           {id: nanoid(), text: action.payload, tasks: []},
         ]
       };
-    case 'ADD_TASK':
+    }
+      
+    case 'ADD_TASK': {
       const targetLaneIndex = findItemIndexById(state.lists, action.payload.listId);
       state.lists[targetLaneIndex].tasks.push({
         id: nanoid(),
@@ -84,21 +94,46 @@ const appStateReducer = (state: AppState, action: Action): AppState => {
       return {
         ...state,
       };
-    case 'MOVE_LIST':
+    }
+     
+    case 'MOVE_LIST': {
       const { dragIndex, hoverIndex } = action.payload;
       state.lists = moveItem(state.lists, dragIndex, hoverIndex)
       return {
         ...state,
       }
-    case 'SET_DRAGGED_ITEM':
+    }
+      
+    case 'SET_DRAGGED_ITEM': {
       return {
         ...state,
         draggedItem: action.payload,
-      }
-    default:
+      };
+    }
+      
+    case 'MOVE_TASK': {
+      const {
+        // eslint-disable-next-line no-redeclare
+        dragIndex,
+        hoverIndex,
+        sourceColumn,
+        targetColumn
+      } = action.payload;
+      const sourceLaneIndex = findItemIndexById(state.lists, sourceColumn);
+      const targetLaneIndex = findItemIndexById(state.lists, targetColumn);
+      const item = state.lists[sourceLaneIndex].tasks.splice(dragIndex, 1)[0];
+      console.log(item);
+      state.lists[targetLaneIndex].tasks.splice(hoverIndex, 0, item);
+      return {
+        ...state
+      };
+
+    }
+    default: {
       return {
         ...state,
       }
+    }
   }
 }
 
